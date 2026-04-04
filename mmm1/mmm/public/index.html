@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ai Là Triệu Phú Online</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+  <div id="app">
+    <!-- Auth Page -->
+    <div id="authPage" class="page">
+      <div class="auth-container">
+        <div class="auth-brand">
+          <h1>💰 Ai Là Triệu Phú</h1>
+          <p>Trò chơi đố vui trực tuyến</p>
+        </div>
+
+        <!-- Login Form -->
+        <div id="loginForm" class="auth-form active">
+          <h2>Đăng Nhập</h2>
+          <form onsubmit="handleLogin(event)">
+            <div class="form-group">
+              <input type="email" id="loginEmail" placeholder="Email" required>
+            </div>
+            <div class="form-group">
+              <input type="password" id="loginPassword" placeholder="Mật khẩu" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Đăng Nhập</button>
+          </form>
+          <p class="auth-link">
+            Chưa có tài khoản? <a href="#" onclick="switchForm('signupForm')">Đăng ký</a>
+          </p>
+          <p class="auth-link">
+            <a href="#" onclick="switchForm('forgotForm')">Quên mật khẩu?</a>
+          </p>
+        </div>
+
+        <!-- Signup Form -->
+        <div id="signupForm" class="auth-form">
+          <h2>Đăng Ký</h2>
+          <form onsubmit="handleSignup(event)">
+            <div class="form-group">
+              <input type="text" id="signupUsername" placeholder="Tên đăng nhập" required>
+            </div>
+            <div class="form-group">
+              <input type="email" id="signupEmail" placeholder="Email" required>
+            </div>
+            <div class="form-group">
+              <input type="text" id="signupDisplayName" placeholder="Tên hiển thị" required>
+            </div>
+            <div class="form-group">
+              <input type="password" id="signupPassword" placeholder="Mật khẩu" required>
+            </div>
+            <div class="form-group">
+              <input type="password" id="signupConfirm" placeholder="Xác nhập mật khẩu" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Đăng Ký</button>
+          </form>
+          <p class="auth-link">
+            Đã có tài khoản? <a href="#" onclick="switchForm('loginForm')">Đăng nhập</a>
+          </p>
+        </div>
+
+        <!-- Forgot Password Form -->
+        <div id="forgotForm" class="auth-form">
+          <h2>Quên Mật Khẩu</h2>
+          <form onsubmit="handleForgotPassword(event)">
+            <div class="form-group">
+              <input type="email" id="forgotEmail" placeholder="Email" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Gửi Yêu Cầu</button>
+          </form>
+          <p class="auth-link">
+            <a href="#" onclick="switchForm('loginForm')">Quay lại đăng nhập</a>
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Lobby Page -->
+    <div id="lobbyPage" class="page hidden">
+      <header class="header">
+        <div class="container">
+          <h1>💰 Ai Là Triệu Phú</h1>
+          <div class="user-menu">
+            <span id="userName"></span>
+            <button class="btn btn-secondary" onclick="logout()">Đăng Xuất</button>
+          </div>
+        </div>
+      </header>
+
+      <main class="container">
+        <div class="lobby-content">
+          <section class="room-creation">
+            <h2>Tạo Phòng Chơi</h2>
+            <div class="form-group">
+              <input type="text" id="roomNameInput" placeholder="Tên phòng chơi">
+            </div>
+            <button class="btn btn-primary" onclick="createRoom()">Tạo Phòng</button>
+          </section>
+
+          <section class="room-list">
+            <h2>Danh Sách Phòng Chơi</h2>
+            <div id="roomsContainer" class="rooms-grid">
+              <p class="loading">Đang tải...</p>
+            </div>
+          </section>
+
+          <section class="player-stats">
+            <h2>Thống Kê Của Bạn</h2>
+            <div class="stats-grid">
+              <div class="stat-item">
+                <h3 id="statGames">0</h3>
+                <p>Trò chơi đã chơi</p>
+              </div>
+              <div class="stat-item">
+                <h3 id="statWins">0</h3>
+                <p>Trò chơi thắng</p>
+              </div>
+              <div class="stat-item">
+                <h3 id="statScore">0</h3>
+                <p>Điểm tổng cộng</p>
+              </div>
+            </div>
+          </section>
+        </div>
+      </main>
+    </div>
+
+    <!-- Room Page -->
+    <div id="roomPage" class="page hidden">
+      <header class="header">
+        <div class="container">
+          <h1>Phòng: <span id="roomNameDisplay"></span></h1>
+          <button class="btn btn-secondary" onclick="leaveRoom()">Rời Phòng</button>
+        </div>
+      </header>
+
+      <main class="container">
+        <div class="room-content">
+          <section class="players-section">
+            <h2>Người Chơi (<span id="playersCount">0</span>/4)</h2>
+            <div id="playersContainer" class="players-list"></div>
+
+            <div class="room-actions">
+              <label class="ready-checkbox">
+                <input type="checkbox" id="readyToggle" onchange="toggleReady()">
+                Sẵn sàng chơi
+              </label>
+              <button id="startGameBtn" class="btn btn-success hidden" onclick="startGame()">
+                Bắt Đầu Trò Chơi
+              </button>
+            </div>
+          </section>
+
+          <section class="chat-section">
+            <h2>Trò Chuyện</h2>
+            <div id="chatMessages" class="chat-messages"></div>
+            <div class="chat-input">
+              <input type="text" id="messageInput" placeholder="Nhập tin nhắn...">
+              <button onclick="sendMessage()" class="btn btn-primary">Gửi</button>
+            </div>
+          </section>
+        </div>
+      </main>
+    </div>
+
+    <!-- Game Page -->
+    <div id="gamePage" class="page hidden">
+      <header class="game-header">
+        <div class="question-counter">
+          <span id="questionNumber">1</span> / 15
+        </div>
+        <div class="timer" id="gameTimer">60</div>
+        <div class="current-score" id="currentScore">0 điểm</div>
+      </header>
+
+      <main class="game-container">
+        <section class="question-section">
+          <h2 id="questionText"></h2>
+
+          <div class="options-grid">
+            <button class="option-btn" data-answer="a" onclick="selectAnswer('a')">
+              <span class="option-letter">A</span>
+              <span id="optionA" class="option-text"></span>
+            </button>
+            <button class="option-btn" data-answer="b" onclick="selectAnswer('b')">
+              <span class="option-letter">B</span>
+              <span id="optionB" class="option-text"></span>
+            </button>
+            <button class="option-btn" data-answer="c" onclick="selectAnswer('c')">
+              <span class="option-letter">C</span>
+              <span id="optionC" class="option-text"></span>
+            </button>
+            <button class="option-btn" data-answer="d" onclick="selectAnswer('d')">
+              <span class="option-letter">D</span>
+              <span id="optionD" class="option-text"></span>
+            </button>
+          </div>
+
+          <div class="confirm-section">
+            <button id="confirmAnswerBtn" class="btn btn-success hidden" onclick="confirmAnswer()">
+              ✓ Xác Nhận
+            </button>
+          </div>
+
+          <div class="lifelines-section">
+            <h3>Quyền Trợ Giúp</h3>
+            <div class="lifelines-grid">
+              <button class="lifeline-btn" id="lifelineHalf" onclick="useFiftyFifty()" title="50/50">
+                50/50
+              </button>
+              <button class="lifeline-btn" id="lifelineAudience" onclick="useAskAudience()" title="Hỏi ý kiến khán giả">
+                🎤 Hỏi KG
+              </button>
+              <button class="lifeline-btn" id="lifelineStop" onclick="stopGame()" title="Xin dừng cuộc chơi">
+                ⚠️ Xin Dừng
+              </button>
+              <button class="btn btn-danger" onclick="exitGame()" title="Thoát game">
+                🚪 Thoát Game
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <section class="other-players">
+          <h3>Người Chơi Khác</h3>
+          <div id="otherPlayersContainer" class="other-players-list"></div>
+        </section>
+      </main>
+    </div>
+
+    <!-- Leaderboard Page -->
+    <div id="leaderboardPage" class="page hidden">
+      <div class="leaderboard-container">
+        <h1>🏆 Bảng Xếp Hạng</h1>
+
+        <div id="leaderboardTable" class="leaderboard-table">
+          <div class="leaderboard-header">
+            <div class="rank">Hạng</div>
+            <div class="name">Tên</div>
+            <div class="score">Điểm</div>
+          </div>
+          <div id="leaderboardRows"></div>
+        </div>
+
+        <button class="btn btn-primary" onclick="goToLobby()">Quay Lại Sảnh Chơi</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="app.js"></script>
+</body>
+
+</html>

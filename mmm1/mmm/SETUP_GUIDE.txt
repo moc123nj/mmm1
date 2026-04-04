@@ -1,0 +1,297 @@
+📱 AI LÀ TRIỆU PHÚ ONLINE - GAME MULTIPLAYER
+================================================
+
+🎉 ĐÃ HOÀN THÀNH! Tất cả các file đã được tạo thành công.
+
+📦 TỪ IMPORTER ĐÃ ĐƯỢC TẠO:
+=========================================
+
+✅ BACKEND (Server)
+   ├── server/server.js          - Express server + Socket.io
+   ├── models/User.js             - User model (tài khoản, mật khẩu, thống kê)
+   ├── models/Room.js             - Room model (phòng chơi, người chơi)
+   ├── models/Game.js             - Game model (lịch sử trò chơi, điểm)
+   ├── models/Question.js         - Question model (câu hỏi, đáp án)
+   ├── routes/auth.js             - Auth API (signup, login, forgot password)
+   ├── routes/rooms.js            - Room API (create, join, leave, ready)
+   ├── routes/questions.js        - Question API (get, add, edit, delete)
+   ├── middleware/auth.js         - JWT authentication middleware
+   └── seed.js                    - 25 câu hỏi được chuẩn bị sẵn
+
+✅ FRONTEND (Client)
+   ├── public/index.html          - Trang HTML chính
+   ├── public/styles.css          - Styling đẹp mắt (Dark Theme)
+   ├── public/app.js              - JavaScript xử lý game
+   └── public/               - Server tự động phục vụ
+
+✅ CONFIGURATION
+   ├── package.json               - Dependencies & scripts
+   ├── .env                       - Environment variables
+   ├── .gitignore                 - Git ignore
+   ├── README.md                  - Tài liệu chính
+   └── GUIDE.md                   - Hướng dẫn chi tiết
+
+🚀 HƯỚNG DẪN KHỞI ĐỘNG
+======================
+
+📝 BƯỚC 1: Cài đặt MongoDB
+   - Tải MongoDB Community tại: https://www.mongodb.com/try/download/community
+   - Cài đặt MongoDB
+   - Khởi động MongoDB: mongod (hoặc MongoDB Server nếu đã cài dịch vụ)
+
+📝 BƯỚC 2: Cài đặt Dependencies
+   Mở PowerShell/Terminal tại thư mục c:\mmm
+   
+   ```
+   npm install
+   ```
+
+📝 BƯỚC 3: Seed Câu Hỏi
+   Thêm 25 câu hỏi mẫu vào database
+   
+   ```
+   npm run seed
+   ```
+   
+   Output mong đợi:
+   "MongoDB connected"
+   "Cleared existing questions"
+   "Successfully inserted 25 questions"
+
+📝 BƯỚC 4: Khởi Động Server
+   ```
+   npm start
+   ```
+   
+   hoặc development mode (tự tải lại khi code thay đổi):
+   ```
+   npm run dev
+   ```
+   
+   Output mong đợi:
+   "MongoDB connected"
+   "Server running on port 3000"
+
+📝 BƯỚC 5: Truy Cập Ứng Dụng
+   Mở trình duyệt: http://localhost:3000
+
+💻 ĐIỀU HÀNH GAME
+==================
+
+📌 FLOW 1: ĐẦU TIÊN LẦN SỬ DỤNG
+   1. Nhấp vào "Đăng Ký"
+   2. Điền: Tên đăng nhập, Email, Tên hiển thị, Mật khẩu
+   3. Nhấn "Đăng Ký"
+   4. Tự động đăng nhập và vào sảnh chơi
+
+📌 FLOW 2: TẠO PHÒNG CHƠI
+   1. Nhập tên phòng (VD: "Phòng Thư Giãn")
+   2. Nhấn "Tạo Phòng"
+   3. Bạn sẽ làm chủ phòng
+
+📌 FLOW 3: THAM GIA PHÒNG
+   1. Xem danh sách phòng
+   2. Nhấn vào phòng muốn tham gia
+   3. Bạn sẽ được thêm vào danh sách người chơi
+
+📌 FLOW 4: CHUẨN BỊ TRƯỚC KHI CHƠI
+   1. Bấm "Sẵn sàng chơi" (checkbox)
+   2. Chờ các người khác cũng sẵn sàng
+   3. Chủ phòng sẽ thấy nút "Bắt Đầu Trò Chơi"
+
+📌 FLOW 5: CHƠI GAME
+   1. Chủ phòng nhấn "Bắt Đầu Trò Chơi"
+   2. 15 câu hỏi sẽ xuất hiện tuần tự
+   3. 60 giây cho mỗi câu
+   4. Chọn A/B/C/D
+   5. Trả lời đúng: +15 điểm
+   6. Có thể dùng: 50/50, Hỏi Khán Giả, Chặn, Dừng (mỗi cái 1 lần)
+
+📌 FLOW 6: KẾT THÚC & XEM BẢNG XẾP HẠNG
+   1. Sau 15 câu hỏi
+   2. Bảng xếp hạng hiển thị
+   3. 🥇 🥈 🥉 cho top 3
+
+🎮 ĐẶC TÍNH GAME
+=================
+
+✨ QUY TẮC
+   ✓ 15 câu hỏi
+   ✓ 60 giây cho mỗi câu
+   ✓ Trả lời đúng: +15 điểm (tổng 225 điểm tối đa)
+   ✓ Trả lời sai: 0 điểm
+   ✓ Cùng một bộ câu hỏi cho tất cả người chơi
+
+✨ QUYỀN TRỢ GIÚP (Lifelines)
+   1. 50/50 - Loại bỏ 2 câu trả lời sai, còn lại 2 câu
+   2. 🎤 Hỏi Ý Kiến Khán Giả - Xem % bình chọn khán giả
+   3. 🚫 Chặn - Ngăn người chơi khác trả lời câu này
+   4. ⚠️ Dừng - Kết thúc trò chơi ngay tức khắc
+
+✨ NHÂN VẬT VÀ THỐNG KÊ
+   - Mỗi player có profile riêng
+   - Theo dõi: Trò chơi đã chơi, Lần thắng, Tổng điểm
+
+✨ PHÒNG CHƠI
+   - Tối đa 4 người chơi
+   - Trò chuyện thời gian thực trong phòng
+   - Chủ phòng quyết định bắt đầu game
+
+🌐 GỌI API (TÙY CHỌN - FRONTEND ĐÃ XỬ LÝ)
+===========================================
+
+AUTHENTICATION
+   POST /api/auth/register
+   POST /api/auth/login
+   POST /api/auth/forgot-password
+   GET /api/auth/me
+
+PHÒNG CHƠI
+   POST /api/rooms                    - Tạo phòng
+   GET /api/rooms                     - Danh sách phòng
+   POST /api/rooms/:roomCode/join     - Tham gia phòng
+   POST /api/rooms/:roomCode/leave    - Rời phòng
+   POST /api/rooms/:roomCode/ready    - Đánh dấu sẵn sàng
+
+CÂU HỎI
+   GET /api/questions                 - Tất cả câu hỏi
+   POST /api/questions                - Thêm câu hỏi mới
+   PUT /api/questions/:id             - Chỉnh sửa câu hỏi
+   DELETE /api/questions/:id          - Xóa câu hỏi
+
+📊 CẤU TRÚC DATABASE (MONGODB)
+==============================
+
+Users Collection:
+   {
+     _id: ObjectId,
+     username: string (unique),
+     email: string (unique),
+     password: string (hashed),
+     displayName: string,
+     totalScore: number,
+     gamesPlayed: number,
+     wins: number,
+     createdAt: date
+   }
+
+Questions Collection:
+   {
+     _id: ObjectId,
+     question: string,
+     options: { a, b, c, d },
+     correctAnswer: 'a'|'b'|'c'|'d',
+     difficulty: 1-15,
+     category: string
+   }
+
+Rooms Collection:
+   {
+     _id: ObjectId,
+     roomCode: string (unique),
+     roomName: string,
+     owner: userId,
+     players: [{userId, username, displayName, isReady}],
+     status: 'waiting'|'playing'|'finished',
+     currentQuestion: number
+   }
+
+Games Collection:
+   {
+     _id: ObjectId,
+     room: roomId,
+     players: [{userId, username, score, answers, lifelinesUsed}],
+     status: 'in-progress'|'completed',
+     startedAt: date,
+     endedAt: date
+   }
+
+🛠️ TROUBLESHOOTING
+===================
+
+❌ Lỗi: "MongoDB connection failed"
+   ✓ Kiểm tra MongoDB đang chạy
+   ✓ Port MongoDB là 27017
+   ✓ Kiểm tra MONGODB_URI trong .env
+
+❌ Lỗi: "Port 3000 already in use"
+   ✓ Thay đổi PORT trong .env
+   ✓ Hoặc: npx kill-port 3000
+
+❌ Lỗi: "socket.io failed to connect"
+   ✓ Xóa cache browser (Ctrl+Shift+Delete)
+   ✓ Kiểm tra server đang chạy
+
+❌ Lỗi: "npm install không thành công"
+   ✓ Xóa folder node_modules
+   ✓ npm cache clean --force
+   ✓ npm install lại
+
+❌ Game không hiển thị câu hỏi
+   ✓ Chạy: npm run seed
+   ✓ Kiểm tra MongoDB có dữ liệu
+
+🎨 GIAO DIỆN
+=============
+
+✨ Dark Theme with Gradients
+   - Primary: Blue (#1e90ff)
+   - Secondary: Red (#ff6b6b)
+   - Success: Green (#51cf66)
+   - Dark Background: #1a1a2e
+
+✨ Responsive Design
+   - Desktop (1200px+)
+   - Tablet (768px - 1199px)
+   - Mobile (< 768px)
+
+✨ Real-time Updates
+   - WebSocket (Socket.io)
+   - Instant messaging
+   - Live player status
+
+📱 MULTI-DEVICE
+===============
+
+✓ Desktop: Full experience
+✓ Tablet: Optimized layout
+✓ Mobile: Touch-friendly buttons
+
+💡 LỜI KHUYÊN
+=============
+
+1. TEST với 4 trình duyệt khác nhau để thử multiplayer
+2. THÊM CÂU HỎI mới qua POST /api/questions
+3. THEO DÕI ĐIỂM để xem ai thắng
+4. DÙNG ChatGPT để tạo thêm câu hỏi
+
+📚 FILE QUAN TRỌNG
+==================
+
+Để tinh chỉnh game:
+   - public/styles.css      → Thay đổi màu sắc, font
+   - server/server.js       → Thêm logic game mới
+   - models/Question.js     → Thêm trường mới cho câu hỏi
+   - seed.js                → Thêm câu hỏi
+
+🎯 NEXT STEPS
+=============
+
+1. Chạy: npm install
+2. Chạy: npm run seed
+3. Chạy: npm start
+4. Mở: http://localhost:3000
+5. Đăng ký tài khoản
+6. Tạo phòng chơi
+7. Mở thêm tab browser để test multiplayer
+8. CHƠI GAME! 🎮
+
+🎊 CHÚC BẠN CHƠI VUI VẺ! 🎊
+
+Nếu có vấn đề, kiểm tra:
+   - MongoDB: mongod
+   - Server: npm start
+   - Browser: http://localhost:3000
+   - Console Log (F12 → Console)
+
+Made with ❤️ - 2024
